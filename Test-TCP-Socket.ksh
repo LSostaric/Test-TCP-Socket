@@ -2,7 +2,7 @@
 
 if [ "$1" == "help" ] ; then
 
-echo "Usage: Test-TCP-Socket.ksh destination-addr destination-port source-addr expected-output [fail-message] [success-message]"
+echo "Usage: Test-TCP-Socket.ksh destination-addr destination-port source-addr expected-output [success-message] [fail-message]"
 exit 0
 
 fi
@@ -31,21 +31,21 @@ port="$2"
 source="$3"
 expected="$4"
 
-if [ -z "$5" ] ; then
+if [ -z "$6" ] ; then
 
-fail="Could not connect to $host on port $port."
+fail="Invalid output from $host on port $port."
 
 else
-fail="$5"
+fail="$6"
 
 fi
 
-if [ -z "$6" ] ; then
+if [ -z "$5" ] ; then
 
 success="O.K. Success."
 
 else
-success="$6"
+success="$5"
 
 fi
 
