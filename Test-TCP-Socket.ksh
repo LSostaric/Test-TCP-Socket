@@ -2,7 +2,7 @@
 
 if [ "$1" == "help" ] ; then
 
-echo "Usage: Test-TCP-Socket.ksh destination-addr destination-port source-addr [expected-output] [unexpected-output]"
+echo "Usage: Test-TCP-Socket.ksh destination-addr destination-port source-addr expected-output [fail-message] [success-message]"
 exit 0
 
 fi
@@ -19,28 +19,33 @@ if [ -z "$1" ] ; then
         echo "You have to specify the source address. Terminating..."
         echo "Use Test-TCP-Socket.ksh help for usage."
         exit 3
+    elif [ -z "$4" ] ; then
+        echo "You have to specify the output expected from the socket."
+        echo "Use Test-TCP-Socket.ksh help for usage"
+        exit 3
 fi
 
 
 host="$1"
 port="$2"
 source="$3"
-
-if [ -z "$4" ] ; then
-
-expected="Connected"
-
-else
 expected="$4"
-
-fi
 
 if [ -z "$5" ] ; then
 
-unexpected="Could not connect to $host on port $port."
+fail="Could not connect to $host on port $port."
 
 else
-unexpected="$5"
+fail="$5"
+
+fi
+
+if [ -z "$6" ] ; then
+
+success="O.K. Success."
+
+else
+success="$6"
 
 fi
 
@@ -48,10 +53,10 @@ output="$(nc -s "$source" "$host" "$port" 2>&1 <<EOF
 EOF
 )"
 
-if [ $(echo "$output" | grep -Fic "$expected") -eq 0 ] ; then
-        echo "$unexpected"
+if [ $(echo "$output" | grep -ic "$expected") -eq 0 ] ; then
+        echo "$fail"
     else
-        echo "$expected"
+        echo "$success"
 fi
 
 exit 0
